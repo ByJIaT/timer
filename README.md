@@ -1,1 +1,1 @@
-# Timer on python.
+# Timer on Python with pyqt6
