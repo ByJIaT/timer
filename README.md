@@ -1,5 +1,16 @@
 # Таймер
 Просто таймер.
 ### Технологии
-- Python3
-- PyQT6
+- Python 3.11
+- PyQT6 6.5.0
+
+Установить зависимости из файла requirements.txt:
+
+```bash
+python3 - m pip install - -upgrade pip
+```
+
+```bash
+pip install - r requirements.txt
+```
+
