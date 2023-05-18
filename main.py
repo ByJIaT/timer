@@ -1,23 +1,20 @@
 import sys
 
-from PyQt6.QtMultimedia import QSoundEffect
 from PyQt6.QtCore import QTimer, QTime, QUrl
+from PyQt6.QtMultimedia import QSoundEffect
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
+import ui
 
-import timer
 
-
-class Main(QMainWindow, timer.Ui_MainWindow):
+class Main(QMainWindow, ui.Ui_MainWindow):
     def __init__(self):
         super().__init__()
 
         self.setupUi(self)
 
         self.audio = QSoundEffect()
-        self.audio.setSource(QUrl.fromLocalFile('Ring02.wav'))
-
-        self.lcdNumber.setNumDigits(8)
+        self.audio.setSource(QUrl.fromLocalFile("media/sound.wav"))
 
         self.timeEdit.timeChanged.connect(self.set_time)
 
@@ -26,16 +23,16 @@ class Main(QMainWindow, timer.Ui_MainWindow):
 
         self.timer.timeout.connect(self.show_timer)
 
-        self.pushButton.clicked.connect(self.start)
-        self.pushButton_2.clicked.connect(self.stop)
-        self.pushButton_3.clicked.connect(self.reset)
+        self.start_button.clicked.connect(self.start)
+        self.stop_button.clicked.connect(self.stop)
+        self.reset_button.clicked.connect(self.reset)
+
+    def lcd_display(self):
+        self.lcdNumber.display(self.time.toString("hh:mm:ss"))
 
     def set_time(self, value):
-        secs = value.second()
-        mins = value.minute()
-        hours = value.hour()
-        self.time.setHMS(hours, mins, secs)
-        self.lcdNumber.display(self.time.toString('hh:mm:ss'))
+        self.time.setHMS(value.hour(), value.minute(), value.second())
+        self.lcd_display()
 
     def show_timer(self):
         if self.time.second() == self.time.minute() == self.time.hour() == 0:
@@ -43,9 +40,10 @@ class Main(QMainWindow, timer.Ui_MainWindow):
             self.audio.play()
         else:
             self.time = self.time.addSecs(-1)
-            self.lcdNumber.display(self.time.toString('hh:mm:ss'))
+            self.lcd_display()
 
     def start(self):
+        self.set_time(self.timeEdit.time())
         self.timer.start(1000)
 
     def stop(self):
@@ -55,12 +53,10 @@ class Main(QMainWindow, timer.Ui_MainWindow):
         self.timer.stop()
         self.timeEdit.setTime(QTime(0, 0, 0))
         self.time.setHMS(0, 0, 0)
-        self.lcdNumber.display(self.time.toString('hh:mm:ss'))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
-
     win = Main()
     win.show()
     sys.exit(app.exec())
