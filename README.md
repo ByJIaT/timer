@@ -14,3 +14,7 @@ python3 - m pip install - -upgrade pip
 pip install - r requirements.txt
 ```
 
+Запуск:
+```bash
+python3 main.py
+```
